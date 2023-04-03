@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}Главная{% endblock %}
+{% block content %}
+{% load extras %}
+<h1 class="main__title">Главная</h1>
+
+
+<form method="POST">
+    <label for="language">Модель</label>
+    <select name="model" id="model">
+        <option value={{all_models}}>Все</option>
+        {% for model in models %}
+        <option value={{model.name}}>{{model.name}}</option>
+        {% endfor %}
+    </select>
+    <input type="submit" value="Применить">
+</form>
+
+<table border="1">
+    <tr>
+        <th>Бортовой номер</th>
+        <th>Модель</th>
+        <th>Макс. грузоподъемность, т</th>
+        <th>Текущий вес, т</th>
+        <th>Перегруз, %</th>
+    </tr>
+    {% if last_trips %}
+    {% for trip in last_trips %}
+    <tr>
+        <td>{{trip.truck.side_number}}</td>
+        <td>{{trip.truck.model}}</td>
+        <td>{{trip.truck.model.carrying}}</td>
+        <td>{{trip.weight}}</td>
+        <td>{{ trip.weight|truck_overload:trip.truck.model.carrying }}</td>
+    </tr>
+    {% endfor %}
+    {% else %}
+    <tr>
+    </tr>
+    {% endif %}
+
+</table>
+{% endblock %}
